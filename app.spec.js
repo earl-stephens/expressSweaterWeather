@@ -36,8 +36,7 @@ describe('user can make post request', () => {
                        .then(response => {
                          console.log(response.body);
       expect(response.statusCode).toBe(201);
-      expect(Object.keys(response.body)).toContain('email')
-      // expect(Object.keys(response.body)).toContain('password')
+      expect(Object.keys(response.body)).toContain('api_key')
     });
     shell.exec('npx sequelize db:migrate:undo:all');
   });
