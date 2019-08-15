@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">58.33% </span>
+        <span class="strong">84.62% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>7/12</span>
+        <span class='fraction'>11/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,21 +30,21 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>3/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">58.33% </span>
+        <span class="strong">84.62% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/12</span>
+        <span class='fraction'>11/13</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -69,7 +69,9 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -77,17 +79,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,19 +103,21 @@ var bcrypt = require('bcrypt');
 var saltRounds = 10;
 &nbsp;
 /* post new users */
-router.post('/', <span class="fstat-no" title="function not covered" >fu</span>nction(req, res, next) {
-<span class="cstat-no" title="statement not covered" >  User.create({</span>
-    email: req.body.email,
-    password: req.body.password
-  })
-  .then(<span class="fstat-no" title="function not covered" >us</span>ers =&gt; {
-<span class="cstat-no" title="statement not covered" >    res.setHeader('Content-Type', 'application/json');</span>
-<span class="cstat-no" title="statement not covered" >    res.status(201).send(JSON.stringify(users));</span>
-  })
-  .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; {
-<span class="cstat-no" title="statement not covered" >    res.setHeader('Content-Type', 'application/json');</span>
-<span class="cstat-no" title="statement not covered" >    res.status(500).send({error})</span>
-  })
+router.post('/', function(req, res, next) {
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash){
+    User.create({
+      email: req.body.email,
+      password: hash
+    })
+    .then(users =&gt; {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(201).send(JSON.stringify(users));
+    })
+    .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; {
+<span class="cstat-no" title="statement not covered" >      res.setHeader('Content-Type', 'application/json');</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).send({error})</span>
+    })
+  });
 });
 &nbsp;
 module.exports = router;
@@ -121,7 +127,7 @@ module.exports = router;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Aug 15 2019 14:43:00 GMT-0600 (Mountain Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Aug 15 2019 16:27:07 GMT-0600 (Mountain Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

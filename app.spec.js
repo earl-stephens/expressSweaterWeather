@@ -20,19 +20,25 @@ describe('test the root path', () => {
 
 describe('user can make post request', () => {
   test('to create account and get an api key back', () => {
+    shell.exec('npx sequelize db:migrate');
     var body = {"email": "earl@example.com",
                 "password": "password",
                 "password_confirmation": "password"
                 }
-      request(app).post('/api/v1/users')
+      return request(app).post('/api/v1/users')
                        .type('form')
+                       .set("Content-Type", "application/json")
                        .send(body)
+                       // alternative way of passing body data:
                        // .send({"email": "earl@example.com",
                        //       "password": "password",
                        //       "password_confirmation": "password"})
                        .then(response => {
+                         console.log(response.body);
       expect(response.statusCode).toBe(201);
-      expect(Object.keys(response.body[0])).toContain('email')
+      expect(Object.keys(response.body)).toContain('email')
+      // expect(Object.keys(response.body)).toContain('password')
     });
+    shell.exec('npx sequelize db:migrate:undo:all');
   });
 });
