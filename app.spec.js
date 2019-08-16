@@ -10,14 +10,6 @@ describe('test the root path', () => {
   });
 });
 
-// A user can make a post request to
-// api/v1/users
-// with their email, password, and password confirmation
-// in the body of the request as JSON.
-// The app will store the information in the database
-// and will return a response that contains a
-// 201 status code and an API key for that user.
-
 describe('user can make post request', () => {
   test('to create account and get an api key back', () => {
     shell.exec('npx sequelize db:migrate');
@@ -40,7 +32,7 @@ describe('user can make post request', () => {
     shell.exec('npx sequelize db:migrate:undo:all');
   });
 
-  test('to create account and get an api key back', () => {
+  test('sad path create account and get an api key back', () => {
     shell.exec('npx sequelize db:migrate');
     var body = {"email": "earl@example.com",
                 "password": "password",
