@@ -34,9 +34,24 @@ describe('user can make post request', () => {
                        //       "password": "password",
                        //       "password_confirmation": "password"})
                        .then(response => {
-                         console.log(response.body);
       expect(response.statusCode).toBe(201);
       expect(Object.keys(response.body)).toContain('api_key')
+    });
+    shell.exec('npx sequelize db:migrate:undo:all');
+  });
+
+  test('to create account and get an api key back', () => {
+    shell.exec('npx sequelize db:migrate');
+    var body = {"email": "earl@example.com",
+                "password": "password",
+                "password_confirmation": "pw"
+                }
+      return request(app).post('/api/v1/users')
+                       .type('form')
+                       .set("Content-Type", "application/json")
+                       .send(body)
+                       .then(response => {
+      expect(response.statusCode).toBe(401)
     });
     shell.exec('npx sequelize db:migrate:undo:all');
   });
