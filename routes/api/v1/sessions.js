@@ -3,33 +3,47 @@ var router = express.Router();
 var User = require('../../../models').User;
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
+var session = require('client-sessions');
 var randomstring = require('randomstring');
+
+/* this section is an attempt at creating a session
+Keeping this here for future reference
+var app = express();
+var generatedSecret = randomstring.generate();
+app.use(session({
+  cookieName: 'session',
+  secret: "cookieMonster",
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000
+}));
+*/
 
 // post user login
 router.post('/', function(req, res, next) {
-  //var hash = bcrypt.hashSync(req.body.password, saltRounds);
-  /*var comparison = bcrypt.compareSync(req.body.password_confirmation, hash);
-  if (comparison == true) {
-    var generatedKey = randomstring.generate();
-    User.create({
-      email: req.body.email,
-      api_key: generatedKey,
-      password: hash
-    })
+  User.findOne({where: {email: req.body.email}})
     .then(users => {
-      var apiKeyResponse = {"api_key": users.api_key};
-      res.setHeader('Content-Type', 'application/json');
-      res.status(201).send(JSON.stringify(apiKeyResponse));
+      var hash = bcrypt.hashSync(req.body.password, saltRounds);
+      var comparison = bcrypt.compareSync(users.password, hash);
+      if (comparison == true) {
+        var apiKeyResponse = {"api_key": users.api_key};
+        // part of setting up the session
+        /*
+        req.session.seenyou = true;
+        res.setHeader('X-Seen-You', 'false');
+        */
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(JSON.stringify(apiKeyResponse));
+      }
+      else
+      {
+        res.setHeader("Content-Type", "application/json");
+        res.status(401).send("Unauthorized")
+      }
     })
     .catch(error => {
-      res.setHeader('Content-Type', 'application/json');
-      res.status(500).send({error})
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({error});
     })
-  }
-  else {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(401).send({error})
-  };*/
-});
+  });
 
 module.exports = router;
