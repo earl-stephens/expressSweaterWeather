@@ -58,15 +58,14 @@ describe('user can make post request', () => {
   test("user can get a city's forecast", () => {
     var body = {"api_key": "1234567890abcdef"}
       return request(app).get('/api/v1/forecast?location=miami,fl')
-        // .type('form')
+        .type('form')
         .set("Content-Type", "application/json")
         .set("Accept", "application/json")
         .send(body)
         .then(response => {
           expect(response.statusCode).toBe(200);
-          console.log(response.body);
-          // expect(Object.keys(response.body["hourly"]["data"].length)).toEq(8);
-          // expect(Object.keys(response.body["weekly"]["data"].length)).toEq(7);
+          expect(Object.keys(response.body["hourly"]["data"][0])).toContain("humidity");
+          expect(Object.keys(response.body["daily"]["data"][4])).toContain("temperatureMin");
       })
     });
 
