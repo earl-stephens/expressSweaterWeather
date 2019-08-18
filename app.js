@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var namespacedUsersRouter = require('./routes/api/v1/users');
 var sessionsRouter = require('./routes/api/v1/sessions');
+var forecastRouter = require('./routes/api/v1/forecast');
 var sessions = require('client-sessions');
 var randomstring = require('randomstring');
 
@@ -22,6 +23,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/v1/users', namespacedUsersRouter);
 app.use('/api/v1/sessions', sessionsRouter);
+app.use('/api/v1/forecast', forecastRouter);
 
 /*
 This section is an attempt to setup a session
