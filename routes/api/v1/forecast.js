@@ -15,10 +15,15 @@ router.get('/', function(req, res, next) {
       fetch(`https://maps.googleapis.com/maps/api/geocode/json?key=${process.env.GOOGLE_KEY}&address=${req.query.location}`)
       .then(res => res.json())
       .then(json => {
-      res.setHeader('Content-Type', 'application/json');
-      var body = (`${json.results[0].geometry.location.lat},${json.results[0].geometry.location.lng}`);
-      res.status(200).send(JSON.stringify(body));
-    });//.send(JSON.stringify(weatherResponse));
+        var body = (`${json.results[0].geometry.location.lat},${json.results[0].geometry.location.lng}`);
+        fetch(`https://api.darksky.net/forecast/${process.env.DARKSKY_KEY}/${body}`)
+        .then(res => res.json())
+        .then(json =>{
+          res.setHeader('Content-Type', 'application/json');
+          res.status(200).send(JSON.stringify(json))
+        });
+      });
+      //.send(JSON.stringify(weatherResponse));
     } else {
       res.setHeader("Content-Type", "application/json");
       res.status(401).send("Unauthorized");
