@@ -11,8 +11,18 @@ describe('test the root path', () => {
 });
 
 describe('user can make post request', () => {
-  test('to create account and get an api key back', () => {
+  beforeAll(() => {
+    shell.exec('npx sequelize db:create');
+  });
+  beforeEach(() => {
     shell.exec('npx sequelize db:migrate');
+    shell.exec('npx sequelize db:seed:all');
+  });
+  afterEach(() => {
+    shell.exec('npx sequelize db:migrate:undo:all');
+  });
+
+  test('to create account and get an api key back', () => {
     var body = {"email": "earl@example.com",
                 "password": "password",
                 "password_confirmation": "password"
@@ -29,11 +39,9 @@ describe('user can make post request', () => {
       expect(response.statusCode).toBe(201);
       expect(Object.keys(response.body)).toContain('api_key')
     });
-    shell.exec('npx sequelize db:migrate:undo:all');
   });
 
   test('sad path create account and get an api key back', () => {
-    shell.exec('npx sequelize db:migrate');
     var body = {"email": "earl@example.com",
                 "password": "password",
                 "password_confirmation": "pw"
@@ -45,6 +53,19 @@ describe('user can make post request', () => {
                        .then(response => {
       expect(response.statusCode).toBe(401)
     });
-    shell.exec('npx sequelize db:migrate:undo:all');
+  });
+
+  test('user can log in', () => {
+    var body = {"email": "earl@earl.com",
+                "password": "password"
+              }
+    return request(app).post('/api/v1/sessions')
+                        .type('form')
+                        .set("Content-Type", "application/json")
+                        .send(body)
+                        .then(response => {
+      expect(response.statusCode).toBe(200);
+      expect(Object.keys(response.body)).toContain('api_key')
+    })
   });
 });
