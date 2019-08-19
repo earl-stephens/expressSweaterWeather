@@ -8,6 +8,7 @@ var randomstring = require('randomstring');
 /* post new users */
 router.post('/', function(req, res, next) {
   var hash = bcrypt.hashSync(req.body.password, saltRounds);
+  console.log(hash);
   var comparison = bcrypt.compareSync(req.body.password_confirmation, hash);
   if (comparison == true) {
     var generatedKey = randomstring.generate();
