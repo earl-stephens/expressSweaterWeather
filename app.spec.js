@@ -94,4 +94,18 @@ describe('user can make post request', () => {
       expect(Object.keys(response.body)).toContain('api_key')
     });
   });
+
+  test('user can favorite a location', () => {
+    var body = {"api_key": "1234567890abcdef",
+                "location": "charleston,sc"
+                }
+    return request(app).post('/api/v1/favorites')
+                        .type('form')
+                        .set("Content-Type", "application/json")
+                        .send(body)
+                        .then(response => {
+    expect(response.statusCode).toBe(200);
+    expect(Object.key(response.body)).toContain("message")
+    });
+  });
 });
