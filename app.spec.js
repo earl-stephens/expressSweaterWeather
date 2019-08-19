@@ -70,16 +70,42 @@ describe('user can make post request', () => {
     });
 
   test('user can log in', () => {
-    var body = {"email": "earl@earl.com",
+    var body = {"email": "amy@example.com",
+                "password": "password",
+                "password_confirmation": "password"
+                }
+      return request(app).post('/api/v1/users')
+                       .type('form')
+                       .set("Content-Type", "application/json")
+                       .send(body)
+                       .then(response => {
+      expect(response.statusCode).toBe(201);
+    });
+
+    var body2 = {"email": "amy@earl.com",
                 "password": "password"
               }
     return request(app).post('/api/v1/sessions')
                         .type('form')
                         .set("Content-Type", "application/json")
-                        .send(body)
+                        .send(body2)
                         .then(response => {
       expect(response.statusCode).toBe(200);
       expect(Object.keys(response.body)).toContain('api_key')
-    })
+    });
+  });
+
+  test('user can favorite a location', () => {
+    var body = {"api_key": "1234567890abcdef",
+                "location": "charleston,sc"
+                }
+    return request(app).post('/api/v1/favorites')
+                        .type('form')
+                        .set("Content-Type", "application/json")
+                        .send(body)
+                        .then(response => {
+    expect(response.statusCode).toBe(200);
+    expect(Object.keys(response.body)).toContain("message")
+    });
   });
 });
