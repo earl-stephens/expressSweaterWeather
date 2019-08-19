@@ -105,7 +105,7 @@ describe('user can make post request', () => {
                         .send(body)
                         .then(response => {
     expect(response.statusCode).toBe(200);
-    expect(Object.key(response.body)).toContain("message")
+    expect(Object.keys(response.body)).toContain("message")
     });
   });
 });

@@ -1,31 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../../../models').User;
+var Location = require('../../../models').Location;
 
 // post user favorites
 router.post('/', function(req, res, next) {
+  console.log(req.body);
   User.findOne({where: {api_key: req.body.api_key}})
     .then(users => {
-      var comparison = bcrypt.compareSync(req.body.password, users.password);
-      if (comparison == true) {
-        var apiKeyResponse = {"api_key": users.api_key};
-        // part of setting up the session
-        /*
-        req.session.seenyou = true;
-        res.setHeader('X-Seen-You', 'false');
-        */
+      Location.create({
+        name: req.body.location,
+        UserId: users.id
+      })
+      .then(users => {
+        var messageResponse = {"message": `${req.body.location} has been added to your favorites`};
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).send(JSON.stringify(apiKeyResponse));
-      }
-      else
-      {
-        res.setHeader("Content-Type", "application/json");
-        return res.status(401).send("Unauthorized")
-      }
+        res.status(200).send(JSON.stringify(messageResponse));
+      })
     })
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send({error});
+      res.status(401).send({error});
     })
   });
 
