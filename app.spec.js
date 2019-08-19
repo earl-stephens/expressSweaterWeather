@@ -1,6 +1,6 @@
+var app = require('./app');
 var shell = require('shelljs');
 var request = require('supertest');
-var app = require('./app');
 
 describe('test the root path', () => {
   test('it should respond to the get method', () => {
@@ -54,6 +54,20 @@ describe('user can make post request', () => {
       expect(response.statusCode).toBe(401)
     });
   });
+
+  test("user can get a city's forecast", () => {
+    var body = {"api_key": "1234567890abcdef"}
+      return request(app).get('/api/v1/forecast?location=miami,fl')
+        .type('form')
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json")
+        .send(body)
+        .then(response => {
+          expect(response.statusCode).toBe(200);
+          expect(Object.keys(response.body["hourly"]["data"][0])).toContain("humidity");
+          expect(Object.keys(response.body["daily"]["data"][4])).toContain("temperatureMin");
+      })
+    });
 
   test('user can log in', () => {
     var body = {"email": "earl@earl.com",
