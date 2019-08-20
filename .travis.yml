@@ -3,5 +3,7 @@ node_js:
   - "node"
 services:
   - postgresql
+addons:
+  postgresql: "11.1"
 before_script:
   -psql -c 'CREATE DATABASE expressSweaterWeather_test;' -U postgres
