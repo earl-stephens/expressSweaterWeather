@@ -8,7 +8,7 @@
     "operatorsAliases": false
   },
   "test": {
-    "username": "earltstephens",
+    "username": "",
     "password": null,
     "database": "expressSweaterWeather_test",
     "host": "127.0.0.1",
